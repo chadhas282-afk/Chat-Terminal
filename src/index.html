@@ -291,3 +291,14 @@
             const theme = localStorage.getItem('termTheme');
             if (theme) document.body.className = theme;
             const res = await fetch('/api/me');
+               if (res.ok) { const d = await res.json(); setupUI(d.username, d.isAdmin); }
+            else { document.getElementById('login-gate').style.display = 'flex'; }
+        };
+
+        async function boot() {
+            const u = document.getElementById('user').value, p = document.getElementById('pass').value;
+            roomCode = document.getElementById('room').value.toUpperCase() || 'GENERAL';
+            const res = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u, password: p }) });
+            if (res.ok) { const data = await res.json(); localStorage.setItem('lastRoom', roomCode); setupUI(data.username, data.isAdmin); }
+            else alert("ACCESS_DENIED");
+        }
