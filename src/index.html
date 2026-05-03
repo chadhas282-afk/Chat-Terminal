@@ -302,3 +302,12 @@
             if (res.ok) { const data = await res.json(); localStorage.setItem('lastRoom', roomCode); setupUI(data.username, data.isAdmin); }
             else alert("ACCESS_DENIED");
         }
+
+         function setupUI(u, root) {
+            myName = u; isRoot = root;
+            document.getElementById('login-gate').style.display = 'none';
+            document.getElementById('app').style.display = 'grid';
+            document.getElementById('my-name').innerText = u.toLowerCase();
+            roomCode = localStorage.getItem('lastRoom') || 'GENERAL';
+            socket.connect(); socket.emit('joinRoom', { roomCode, skip: 0 });
+        }
