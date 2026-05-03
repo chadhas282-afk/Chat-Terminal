@@ -287,3 +287,7 @@
             if (isAtBottom) log.scrollTop = log.scrollHeight;
         });
         observer.observe(log, { childList: true, subtree: true });
+        window.onload = async () => {
+            const theme = localStorage.getItem('termTheme');
+            if (theme) document.body.className = theme;
+            const res = await fetch('/api/me');
