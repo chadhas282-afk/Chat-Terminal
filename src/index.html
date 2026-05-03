@@ -282,3 +282,8 @@
         const log = document.getElementById('log'), cmdInput = document.getElementById('cmd');
         let roomCode = '', myName = '', isRoot = false, currentSkip = 0;
         const observer = new MutationObserver(() => {
+             const threshold = 150;
+            const isAtBottom = log.scrollHeight - log.scrollTop - log.clientHeight <= threshold;
+            if (isAtBottom) log.scrollTop = log.scrollHeight;
+        });
+        observer.observe(log, { childList: true, subtree: true });
