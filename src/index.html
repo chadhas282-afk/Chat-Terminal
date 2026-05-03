@@ -311,3 +311,9 @@
             roomCode = localStorage.getItem('lastRoom') || 'GENERAL';
             socket.connect(); socket.emit('joinRoom', { roomCode, skip: 0 });
         }
+
+        function addLine(user, text, image, id, rootUser, isHistory = false) {
+            const div = document.createElement('div'); div.className = 'msg'; if (id) div.id = `m-${id}`;
+            const time = `<span style="color:var(--dim); font-size:10px;">[${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}] </span>`;
+            const rootTag = rootUser ? `<span class="root-tag">ROOT</span>` : '';
+            const actions = (user === myName || isRoot) ? `<span onclick="delM('${id}')" style="color:var(--red); cursor:pointer; margin-left:8px; font-size:10px;">[DEL]</span>` : '';
