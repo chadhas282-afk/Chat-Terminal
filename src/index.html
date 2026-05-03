@@ -317,3 +317,23 @@
             const time = `<span style="color:var(--dim); font-size:10px;">[${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}] </span>`;
             const rootTag = rootUser ? `<span class="root-tag">ROOT</span>` : '';
             const actions = (user === myName || isRoot) ? `<span onclick="delM('${id}')" style="color:var(--red); cursor:pointer; margin-left:8px; font-size:10px;">[DEL]</span>` : '';
+             let contentHtml = `${time}${rootTag}<span class="u-tag">${user}:</span> <span>${text}</span>`;
+            if (image) contentHtml += `<img src="${image}" class="terminal-img" onload="log.scrollTop = log.scrollHeight">`;
+
+            div.innerHTML = contentHtml + actions;
+            if (isHistory) {
+                observer.disconnect();
+                log.prepend(div);
+                observer.observe(log, { childList: true, subtree: true });
+            } else {
+                log.appendChild(div);
+            }
+        }
+
+         function loadOlder() { currentSkip += 30; socket.emit('joinRoom', { roomCode, skip: currentSkip }); }
+        function delM(id) { socket.emit('deleteMessage', { messageId: id, roomCode }); }
+
+        async function logout() { await fetch('/api/logout', { method: 'POST' }); localStorage.removeItem('lastRoom'); window.location.reload(); }
+
+        cmdInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && cmdInput.value.trim()) {
