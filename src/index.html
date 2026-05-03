@@ -337,3 +337,12 @@
 
         cmdInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && cmdInput.value.trim()) {
+                 const val = cmdInput.value.trim(), args = val.split(' ');
+                if (args[0] === '/theme') {
+                    const t = `theme-${args[1]}`; document.body.className = t; localStorage.setItem('termTheme', t);
+                } else if (val === '/clear') { log.innerHTML = ''; }
+                else if (val === '/help') { addLine('SYSTEM', 'CMD: /theme <matrix|nord|blood>, /clear, /exit', false, null, false); }
+                else { socket.emit('chatMessage', { roomCode, text: val }); }
+                cmdInput.value = '';
+            }
+        });
