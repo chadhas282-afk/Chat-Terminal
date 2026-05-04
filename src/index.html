@@ -358,3 +358,6 @@
              document.getElementById('load-more').style.display = hasMore ? 'block' : 'none';
             log.scrollTop = log.scrollHeight;
         });
+
+        socket.on('message', (m) => addLine(m.user, m.text, m.image, m._id, m.isAdmin));
+        socket.on('messageDeleted', (id) => document.getElementById(`m-${id}`)?.remove());
