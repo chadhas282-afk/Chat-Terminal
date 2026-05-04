@@ -66,3 +66,7 @@ io.on('connection', (socket) => {
     const user = session.username;
     const isRoot = session.isAdmin;
     let currentRoom = '';
+
+    socket.on('joinRoom', async ({ roomCode, skip = 0 }) => {
+        currentRoom = roomCode; socket.join(roomCode);
+        if (!activeUsers[roomCode]) activeUsers[roomCode] = [];
