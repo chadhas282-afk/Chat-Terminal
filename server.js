@@ -20,3 +20,8 @@ const User = mongoose.model('User', new mongoose.Schema({
 const Message = mongoose.model('Message', new mongoose.Schema({
     room: String, user: String, text: String, image: String,
     isAdmin: { type: Boolean, default: false },
+     timestamp: { type: Date, default: Date.now }
+}));
+
+const sessionMiddleware = session({
+    secret: process.env.SESSION_SECRET,
