@@ -58,3 +58,7 @@ app.post('/api/logout', (req, res) => {
         res.json({ success: true });
     });
 });
+
+const activeUsers = {};
+io.on('connection', (socket) => {
+    const session = socket.request.session;
