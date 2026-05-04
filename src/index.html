@@ -355,3 +355,6 @@
 
         socket.on('loadHistory', ({ messages, hasMore }) => {
             messages.forEach(m => addLine(m.user, m.text, m.image, m._id, m.isAdmin, true));
+             document.getElementById('load-more').style.display = hasMore ? 'block' : 'none';
+            log.scrollTop = log.scrollHeight;
+        });
