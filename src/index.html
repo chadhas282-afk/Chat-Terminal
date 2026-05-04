@@ -361,3 +361,10 @@
 
         socket.on('message', (m) => addLine(m.user, m.text, m.image, m._id, m.isAdmin));
         socket.on('messageDeleted', (id) => document.getElementById(`m-${id}`)?.remove());
+         socket.on('updateUserList', (u) => {
+            document.getElementById('member-list').innerHTML = u.map(n => `<div style="margin-bottom:5px;">● ${n.toLowerCase()}</div>`).join('');
+        });
+    </script>
+</body>
+
+</html>
