@@ -25,3 +25,7 @@ const Message = mongoose.model('Message', new mongoose.Schema({
 
 const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET,
+     resave: true, saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    cookie: { maxAge: 1000 * 60 * 60 * 24, secure: false }
+});
