@@ -40,3 +40,9 @@ app.post('/api/login', async (req, res) => {
     try {
         let user = await User.findOne({ username });
         if (!user) { user = new User({ username, password }); await user.save(); }
+         else if (user.password !== password) return res.status(401).send();
+        req.session.username = user.username;
+        req.session.isAdmin = (password === 'ROOT_ADMIN');
+        res.json({ success: true, username: user.username, isAdmin: req.session.isAdmin });
+    } catch (err) { res.status(500).send(); }
+});
