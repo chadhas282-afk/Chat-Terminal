@@ -34,3 +34,9 @@ app.use(express.json());
 app.use(sessionMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
 io.engine.use(sessionMiddleware);
+
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        let user = await User.findOne({ username });
+        if (!user) { user = new User({ username, password }); await user.save(); }
