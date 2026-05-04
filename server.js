@@ -51,3 +51,10 @@ app.get('/api/me', (req, res) => {
     if (req.session.username) res.json({ username: req.session.username, isAdmin: req.session.isAdmin });
     else res.status(401).send();
 });
+
+app.post('/api/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid');
+        res.json({ success: true });
+    });
+});
