@@ -350,3 +350,8 @@
         document.getElementById('img-in').addEventListener('change', function () {
             const reader = new FileReader();
             reader.onload = (e) => socket.emit('chatMessage', { roomCode, text: `[IMG_SENT]`, image: e.target.result });
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        socket.on('loadHistory', ({ messages, hasMore }) => {
+            messages.forEach(m => addLine(m.user, m.text, m.image, m._id, m.isAdmin, true));
