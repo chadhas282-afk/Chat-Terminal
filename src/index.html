@@ -346,3 +346,7 @@
                 cmdInput.value = '';
             }
         });
+
+        document.getElementById('img-in').addEventListener('change', function () {
+            const reader = new FileReader();
+            reader.onload = (e) => socket.emit('chatMessage', { roomCode, text: `[IMG_SENT]`, image: e.target.result });
