@@ -75,3 +75,7 @@ io.on('connection', (socket) => {
         const history = await Message.find({ room: roomCode }).sort({ timestamp: -1 }).skip(skip).limit(30);
         socket.emit('loadHistory', { messages: history.reverse(), hasMore: history.length === 30 });
     });
+
+    socket.on('chatMessage', async ({ roomCode, text, image, expires }) => {
+        const msg = new Message({ room: roomCode, user, text, image, isAdmin: isRoot });
+        await msg.save();
