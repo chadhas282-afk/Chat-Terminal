@@ -70,3 +70,8 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', async ({ roomCode, skip = 0 }) => {
         currentRoom = roomCode; socket.join(roomCode);
         if (!activeUsers[roomCode]) activeUsers[roomCode] = [];
+         if (!activeUsers[roomCode].includes(user)) activeUsers[roomCode].push(user);
+        io.to(roomCode).emit('updateUserList', activeUsers[roomCode]);
+        const history = await Message.find({ room: roomCode }).sort({ timestamp: -1 }).skip(skip).limit(30);
+        socket.emit('loadHistory', { messages: history.reverse(), hasMore: history.length === 30 });
+    });
