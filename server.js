@@ -46,3 +46,8 @@ app.post('/api/login', async (req, res) => {
         res.json({ success: true, username: user.username, isAdmin: req.session.isAdmin });
     } catch (err) { res.status(500).send(); }
 });
+
+app.get('/api/me', (req, res) => {
+    if (req.session.username) res.json({ username: req.session.username, isAdmin: req.session.isAdmin });
+    else res.status(401).send();
+});
