@@ -62,3 +62,7 @@ app.post('/api/logout', (req, res) => {
 const activeUsers = {};
 io.on('connection', (socket) => {
     const session = socket.request.session;
+     if (!session || !session.username) return socket.disconnect();
+    const user = session.username;
+    const isRoot = session.isAdmin;
+    let currentRoom = '';
