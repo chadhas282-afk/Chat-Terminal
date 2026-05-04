@@ -16,3 +16,7 @@ const User = mongoose.model('User', new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true }
 }));
+
+const Message = mongoose.model('Message', new mongoose.Schema({
+    room: String, user: String, text: String, image: String,
+    isAdmin: { type: Boolean, default: false },
