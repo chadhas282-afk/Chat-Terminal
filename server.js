@@ -95,3 +95,8 @@ io.on('connection', (socket) => {
             io.to(roomCode).emit('messageDeleted', messageId);
         }
     });
+
+     socket.on('disconnect', () => {
+        if (currentRoom && activeUsers[currentRoom]) {
+            activeUsers[currentRoom] = activeUsers[currentRoom].filter(u => u !== user);
+            io.to(currentRoom).emit('updateUserList', activeUsers[currentRoom]);
