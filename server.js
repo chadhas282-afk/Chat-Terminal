@@ -91,3 +91,7 @@ io.on('connection', (socket) => {
     socket.on('deleteMessage', async ({ messageId, roomCode }) => {
         const msg = await Message.findById(messageId);
         if (msg && (msg.user === user || isRoot)) {
+              await Message.findByIdAndDelete(messageId);
+            io.to(roomCode).emit('messageDeleted', messageId);
+        }
+    });
