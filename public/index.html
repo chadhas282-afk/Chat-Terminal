@@ -254,7 +254,7 @@
     </div>
 
     <div id="app">
-         <div id="sidebar">
+        <div id="sidebar">
             <h4 style="color:var(--dim)">ID: <span id="my-name" style="color:var(--cyan)">---</span></h4>
             <h4 style="margin-top:30px; color:var(--dim)">MEMBERS</h4>
             <div id="member-list" style="flex: 1; font-size: 13px;"></div>
@@ -271,27 +271,28 @@
                     style="color:var(--dim); cursor:pointer; font-weight:bold; padding: 5px;">[+]</label>
                 <input type="file" id="img-in" accept="image/*" style="display:none">
                 <span style="color:var(--cyan); font-weight:bold;">➜</span>
-                 <input type="text" id="cmd" placeholder="Type /help..." autocomplete="off">
+                <input type="text" id="cmd" placeholder="Type /help..." autocomplete="off">
             </div>
         </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-         const socket = io({ autoConnect: false });
+        const socket = io({ autoConnect: false });
         const log = document.getElementById('log'), cmdInput = document.getElementById('cmd');
         let roomCode = '', myName = '', isRoot = false, currentSkip = 0;
         const observer = new MutationObserver(() => {
-             const threshold = 150;
+            const threshold = 150;
             const isAtBottom = log.scrollHeight - log.scrollTop - log.clientHeight <= threshold;
             if (isAtBottom) log.scrollTop = log.scrollHeight;
         });
         observer.observe(log, { childList: true, subtree: true });
+
         window.onload = async () => {
             const theme = localStorage.getItem('termTheme');
             if (theme) document.body.className = theme;
             const res = await fetch('/api/me');
-               if (res.ok) { const d = await res.json(); setupUI(d.username, d.isAdmin); }
+            if (res.ok) { const d = await res.json(); setupUI(d.username, d.isAdmin); }
             else { document.getElementById('login-gate').style.display = 'flex'; }
         };
 
@@ -303,7 +304,7 @@
             else alert("ACCESS_DENIED");
         }
 
-         function setupUI(u, root) {
+        function setupUI(u, root) {
             myName = u; isRoot = root;
             document.getElementById('login-gate').style.display = 'none';
             document.getElementById('app').style.display = 'grid';
@@ -317,7 +318,8 @@
             const time = `<span style="color:var(--dim); font-size:10px;">[${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}] </span>`;
             const rootTag = rootUser ? `<span class="root-tag">ROOT</span>` : '';
             const actions = (user === myName || isRoot) ? `<span onclick="delM('${id}')" style="color:var(--red); cursor:pointer; margin-left:8px; font-size:10px;">[DEL]</span>` : '';
-             let contentHtml = `${time}${rootTag}<span class="u-tag">${user}:</span> <span>${text}</span>`;
+
+            let contentHtml = `${time}${rootTag}<span class="u-tag">${user}:</span> <span>${text}</span>`;
             if (image) contentHtml += `<img src="${image}" class="terminal-img" onload="log.scrollTop = log.scrollHeight">`;
 
             div.innerHTML = contentHtml + actions;
@@ -330,14 +332,14 @@
             }
         }
 
-         function loadOlder() { currentSkip += 30; socket.emit('joinRoom', { roomCode, skip: currentSkip }); }
+        function loadOlder() { currentSkip += 30; socket.emit('joinRoom', { roomCode, skip: currentSkip }); }
         function delM(id) { socket.emit('deleteMessage', { messageId: id, roomCode }); }
 
         async function logout() { await fetch('/api/logout', { method: 'POST' }); localStorage.removeItem('lastRoom'); window.location.reload(); }
 
         cmdInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && cmdInput.value.trim()) {
-                 const val = cmdInput.value.trim(), args = val.split(' ');
+                const val = cmdInput.value.trim(), args = val.split(' ');
                 if (args[0] === '/theme') {
                     const t = `theme-${args[1]}`; document.body.className = t; localStorage.setItem('termTheme', t);
                 } else if (val === '/clear') { log.innerHTML = ''; }
@@ -355,13 +357,13 @@
 
         socket.on('loadHistory', ({ messages, hasMore }) => {
             messages.forEach(m => addLine(m.user, m.text, m.image, m._id, m.isAdmin, true));
-             document.getElementById('load-more').style.display = hasMore ? 'block' : 'none';
+            document.getElementById('load-more').style.display = hasMore ? 'block' : 'none';
             log.scrollTop = log.scrollHeight;
         });
 
         socket.on('message', (m) => addLine(m.user, m.text, m.image, m._id, m.isAdmin));
         socket.on('messageDeleted', (id) => document.getElementById(`m-${id}`)?.remove());
-         socket.on('updateUserList', (u) => {
+        socket.on('updateUserList', (u) => {
             document.getElementById('member-list').innerHTML = u.map(n => `<div style="margin-bottom:5px;">● ${n.toLowerCase()}</div>`).join('');
         });
     </script>
