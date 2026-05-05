@@ -100,3 +100,8 @@ io.on('connection', (socket) => {
         if (currentRoom && activeUsers[currentRoom]) {
             activeUsers[currentRoom] = activeUsers[currentRoom].filter(u => u !== user);
             io.to(currentRoom).emit('updateUserList', activeUsers[currentRoom]);
+              }
+    });
+});
+
+server.listen(process.env.PORT || 8000);
