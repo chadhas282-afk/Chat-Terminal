@@ -87,3 +87,7 @@ io.on('connection', (socket) => {
             }, expires * 1000);
         }
     });
+
+    socket.on('deleteMessage', async ({ messageId, roomCode }) => {
+        const msg = await Message.findById(messageId);
+        if (msg && (msg.user === user || isRoot)) {
