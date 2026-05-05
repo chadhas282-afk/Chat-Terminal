@@ -79,3 +79,7 @@ io.on('connection', (socket) => {
     socket.on('chatMessage', async ({ roomCode, text, image, expires }) => {
         const msg = new Message({ room: roomCode, user, text, image, isAdmin: isRoot });
         await msg.save();
+         io.to(roomCode).emit('message', { _id: msg._id, user, text, image, isAdmin: isRoot });
+        if (expires) {
+            setTimeout(async () => {
+                await Message.findByIdAndDelete(msg._id);
