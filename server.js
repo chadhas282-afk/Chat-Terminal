@@ -83,3 +83,7 @@ io.on('connection', (socket) => {
         if (expires) {
             setTimeout(async () => {
                 await Message.findByIdAndDelete(msg._id);
+                   io.to(roomCode).emit('messageDeleted', msg._id);
+            }, expires * 1000);
+        }
+    });
